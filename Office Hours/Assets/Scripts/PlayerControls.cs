@@ -2,25 +2,27 @@ using UnityEngine;
 
 public class PlayerControls : MonoBehaviour
 {
-    //CameraManager camManager;
     GameManager gm;
-    public GameObject playerCam;
-    public GameObject cam01;
-    public GameObject cam02;
-    public GameObject cam03;
-    public GameObject cam04;
+
+    [Header("MAKE PLAYER CAM INDEX 0 ALWAYS")]
+    public GameObject[] cameras;
+    public Camera activeCam;
+    public int currentIndex;
 
     void Start()
     {
         //camManager = GetComponent<CameraManager>();
-        //gm = GetComponent<GameManager>();
+        gm = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
+        activeCam = cameras[0].GetComponent<Camera>();
+        currentIndex = 0;
     }
     void Update()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        activeCam = cameras[currentIndex].GetComponent<Camera>();
+        Ray ray = activeCam.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit))
+        if (Physics.Raycast(ray, out hit) && currentIndex == 0)
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -28,29 +30,68 @@ public class PlayerControls : MonoBehaviour
 
                 if (hit.collider.name == "Monitor (1)")
                 {
-                    playerCam.SetActive(false);
-                    cam01.SetActive(true);
+                    cameras[0].SetActive(false);
+                    cameras[1].SetActive(true);
                     gm.energy -= 15;
+                    currentIndex = 1;
                 }
                 if (hit.collider.name == "Monitor (2)")
                 {
-                    playerCam.SetActive(false);
-                    cam02.SetActive(true);
+                    cameras[0].SetActive(false);
+                    cameras[2].SetActive(true);
                     gm.energy -= 15;
+                    currentIndex = 2;
                 }
                 if (hit.collider.name == "Monitor (3)")
                 {
-                    playerCam.SetActive(false);
-                    cam03.SetActive(true);
+                    cameras[0].SetActive(false);
+                    cameras[3].SetActive(true);
                     gm.energy -= 15;
+                    currentIndex = 3;
                 }
                 if (hit.collider.name == "Monitor (4)")
                 {
-                    playerCam.SetActive(false);
-                    cam04.SetActive(true);
+                    cameras[0].SetActive(false);
+                    cameras[4].SetActive(true);
                     gm.energy -= 15;
+                    currentIndex = 4;
                 }
+                
             }
+        }
+
+        //Previous Camera
+        if (Input.GetKeyUp(KeyCode.A))
+        {
+            if (currentIndex > 0) {
+                cameras[currentIndex].SetActive(false);
+                cameras[currentIndex - 1].SetActive(true);
+                currentIndex = currentIndex - 1;
+                gm.energy -= 15;
+            }
+            else
+            {
+                cameras[0].SetActive(false);
+                cameras[cameras.Length - 1].SetActive(true);
+                currentIndex = cameras.Length - 1;
+                gm.energy -= 15;
+            }
+        }
+        //Next Camera
+        if (Input.GetKeyUp(KeyCode.D) && currentIndex < cameras.Length - 1)
+        {
+            cameras[currentIndex].SetActive(false);
+            cameras[currentIndex + 1].SetActive(true);
+            currentIndex = currentIndex + 1;
+            gm.energy -= 15;
+
+        }
+        //Back to security room
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            cameras[currentIndex].SetActive(false);
+            cameras[0].SetActive(true);
+            currentIndex = 0;
         }
     }
 }

@@ -5,7 +5,6 @@ public class GameManager : MonoBehaviour
 {
     public TextMeshProUGUI energyDisplay;
     public TextMeshProUGUI companyRepDisplay;
-
     public int energy = 100;
     public int companyRep = 0;
 
@@ -21,8 +20,8 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {   
-        energyDisplay.text = energy.ToString("0");
-        companyRepDisplay.text = companyRep.ToString("0");
+        energyDisplay.text = energy.ToString("");
+        companyRepDisplay.text = companyRep.ToString("");
 
         if (energy < 100)
         {
@@ -30,7 +29,7 @@ public class GameManager : MonoBehaviour
 
             if (timer <= 0)
             {
-                energy += 1;
+                energy += Random.Range(1,3);
                 timer = startingTimer;
             }
         }

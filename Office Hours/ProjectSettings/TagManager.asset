@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Monitor 1
   - Worker
+  - GameManager
   layers:
   - Default
   - TransparentFX
