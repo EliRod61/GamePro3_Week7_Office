@@ -24,7 +24,7 @@ public class PlayerControls : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit) && currentIndex == 0)
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) && gm.energy > 0)
             {
                 print(hit.collider.name);
 
@@ -56,35 +56,43 @@ public class PlayerControls : MonoBehaviour
                     gm.energy -= 15;
                     currentIndex = 4;
                 }
-                
             }
         }
 
         //Previous Camera
-        if (Input.GetKeyUp(KeyCode.A))
+        if (Input.GetKeyUp(KeyCode.A) && gm.energy >= 10)
         {
             if (currentIndex > 0) {
                 cameras[currentIndex].SetActive(false);
                 cameras[currentIndex - 1].SetActive(true);
                 currentIndex = currentIndex - 1;
-                gm.energy -= 15;
+                gm.energy -= 10;
             }
             else
             {
                 cameras[0].SetActive(false);
                 cameras[cameras.Length - 1].SetActive(true);
                 currentIndex = cameras.Length - 1;
-                gm.energy -= 15;
+                gm.energy -= 10;
             }
         }
         //Next Camera
-        if (Input.GetKeyUp(KeyCode.D) && currentIndex < cameras.Length - 1)
+        if (Input.GetKeyUp(KeyCode.D) && gm.energy >= 10)
         {
-            cameras[currentIndex].SetActive(false);
-            cameras[currentIndex + 1].SetActive(true);
-            currentIndex = currentIndex + 1;
-            gm.energy -= 15;
-
+            if (currentIndex < cameras.Length - 1)
+            {
+                cameras[currentIndex].SetActive(false);
+                cameras[currentIndex + 1].SetActive(true);
+                currentIndex = currentIndex + 1;
+                gm.energy -= 10;
+            }
+            else
+            {
+                cameras[currentIndex].SetActive(false);
+                cameras[0].SetActive(true);
+                currentIndex = 0;
+                gm.energy -= 10;
+            }
         }
         //Back to security room
         if (Input.GetKey(KeyCode.Escape))

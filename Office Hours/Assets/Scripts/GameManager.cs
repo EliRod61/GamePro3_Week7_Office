@@ -29,13 +29,17 @@ public class GameManager : MonoBehaviour
 
             if (timer <= 0)
             {
-                energy += Random.Range(1,3);
+                energy += Random.Range(2,3);
                 timer = startingTimer;
             }
         }
         if (energy > 100)
         {
             energy = 100;
+        }
+        if (energy <= 0)
+        {
+            energy = 0;
         }
 
     }
